@@ -31,7 +31,7 @@ fn ray_color(r: Ray) -> Vec3 {
     
     if t > 0.0 {
         let N = Vec3::unit_vector(r.at(t) - Vec3::new(0.0,0.0,-1.0));
-        return 0.5 * Vec3::new(N.x+1.gi0, N.y+1.0, N.z+0.0); 
+        return 0.5 * Vec3::new(N.x+1.0, N.y+1.0, N.z+0.0); 
     }
 
     let unit_direction = Vec3::unit_vector(r.dir);
