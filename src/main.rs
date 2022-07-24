@@ -1,3 +1,4 @@
+use std::cell::Cell;
 use std::rc::Rc;
 
 use hit::{Hittable, HitRecord};
@@ -30,7 +31,7 @@ fn hit_sphere(center:Vec3, radius:f64, r:Ray) -> f64 {
 fn write_color(input: Vec3) {
     
     let ir = (255.99 * input.x) as i64; 
-    let ig = (260.99 * input.y) as i64; 
+    let ig = (255.99 * input.y) as i64; 
     let ib = (480.99 * input.z) as i64;
 
     println!("{} {} {}", ir, ig, ib); 
@@ -55,25 +56,31 @@ fn write_color(input: Vec3) {
 // }
 
 fn ray_color(r:Ray, world:HittableList) -> Vec3 {
-    // let rec:HitRecord = HitRecord { p: Vec3::new(0.0,0.0,0.0), normal: Vec3::new(0.0,0.0,0.0), t: 0.0, front_face: false }; 
-    // if world.hit(r, 0.0, f64::INFINITY, rec) {
-    //     return 0.5 * (rec.normal + Vec3::new(1.0,1.0,1.0));
-    // }
-    // let unit_direction:Vec3 = Vec3::unit_vector(r.dir);
-    // let t = 0.6 * (unit_direction.y + 1.0);
-    // (1.0 - t ) * Vec3::new(1.0, 1.0, 1.0) + t * Vec3::new(0.3,0.5,1.0)
+    match world.hit(&r, 0.0, f64::INFINITY){
+        Some(rec) => {
+            return 0.5 * (rec.normal + Vec3::new(1.0,1.0,1.0));
+        }
+        None => {
 
-    
-    let mut t_alt = hit_sphere(Vec3::new(0.0,0.0,-1.0), 0.7, r); 
-    
-    if t_alt > 0.0 {
-        let N = Vec3::unit_vector(r.at(t_alt) - Vec3::new(0.0,0.0,-1.0));
-        return 0.5 * Vec3::new(N.x+1.0, N.y+1.0, N.z+0.0); 
+        }
     }
 
-    let unit_direction = Vec3::unit_vector(r.dir);
-    t_alt = 0.6 * (unit_direction.y + 1.0); 
-    (1.0-t_alt) * Vec3::new(1.0,1.0,1.0) + t_alt * Vec3::new(0.3,0.5,1.0)
+    let unit_direction:Vec3 = Vec3::unit_vector(r.dir);
+    let t = 0.6 * (unit_direction.y + 1.0);
+    (1.0 - t ) * Vec3::new(1.0, 1.0, 1.0) + t * Vec3::new(0.3,0.5,1.0)
+    
+
+    
+    // let mut t_alt = hit_sphere(Vec3::new(0.0,0.0,-1.0), 0.7, r); 
+    
+    // if t_alt > 0.0 {
+    //     let N = Vec3::unit_vector(r.at(t_alt) - Vec3::new(0.0,0.0,-1.0));
+    //     return 0.5 * Vec3::new(N.x+1.0, N.y+1.0, N.z+0.0); 
+    // }
+
+    // let unit_direction = Vec3::unit_vector(r.dir);
+    // t_alt = 0.6 * (unit_direction.y + 1.0); 
+    // (1.0-t_alt) * Vec3::new(1.0,1.0,1.0) + t_alt * Vec3::new(0.3,0.5,1.0)
     
 }
 
@@ -85,9 +92,9 @@ fn main() {
     let image_height = (image_width as f64 / aspect_ratio) as i64; 
 
     // world
-    let mut world: HittableList = HittableList { objects: Vec::new() }; 
-    world.add(Rc::new(Sphere {center: Vec3::new(0.0,0.0,-1.0), radius: 0.5}));
-    world.add(Rc::new(Sphere {center: Vec3::new(0.0,-100.5,-1.0), radius: 0.5}));
+    let mut world: HittableList = HittableList { objects: Vec::new() };
+    world.add(Sphere {center: Vec3::new(0.0,0.0,-1.0), radius: 0.5});
+    world.add(Sphere {center: Vec3::new(0.0,-100.5,-1.0), radius: 0.5});
     // camera
     let viewport_height = 2.0;
     let viewport_width = aspect_ratio * viewport_height; 
@@ -111,9 +118,8 @@ fn main() {
             let ray = Ray::new(origin, dir);
 
             let mut world: HittableList = HittableList { objects: Vec::new() }; 
-            world.add(Rc::new(Sphere {center: Vec3::new(0.0,0.0,-1.0), radius: 0.5}));
-            world.add(Rc::new(Sphere {center: Vec3::new(0.0,-100.5,-1.0), radius: 0.5}));
-            
+            world.add(Sphere {center: Vec3::new(0.0,0.0,0.0), radius: 0.5});
+            world.add(Sphere {center: Vec3::new(0.0,-100.5,-1.0), radius: 100.0});
             let color = ray_color(ray, world);
             write_color(color); 
 
