@@ -1,6 +1,10 @@
 use crate::vec3::Vec3; 
+use crate::ray::Ray;
 mod vec3;
+mod ray;
 
+/// Function that detects if a given sphere 
+/// is hit by a given ray.
 fn hit_sphere(center:Vec3, radius:f64, r:Ray) -> f64 {
     let oc = r.orig - center;
     let a = Vec3::dot(r.dir, r.dir); 
@@ -25,6 +29,8 @@ fn write_color(input: Vec3) {
 
 }
 
+/// determines the color of the pixel
+/// where the ray hits the sphere
 fn ray_color(r: Ray) -> Vec3 {
 
     let mut t = hit_sphere(Vec3::new(0.0,0.0,-1.0), 0.7, r); 
@@ -76,32 +82,4 @@ fn main() {
 
 
 
-/* 
- * ========= ray ============= 
- */
-
-#[derive(PartialEq, Clone, Copy, Debug)]
- struct Ray {
-     pub orig: Vec3,
-     pub dir: Vec3
- }
-
- impl Ray {
-
-    pub fn new(origin: Vec3, dir: Vec3) -> Self {
-         Self {
-            orig: origin,
-            dir: dir,
-        }
-    }
-
-    pub fn at(self, t: f64) -> Vec3 {
-       self.orig + (self.dir * t)
-    }
-
-}
-
-/*
- * ===========================  
- */
 

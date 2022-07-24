@@ -3,7 +3,7 @@ use std::ops::Div;
 use std::ops::Mul;
 use std::ops::Sub;
 
-// represents either a color or point in 3D space
+/// represents either a color or point in 3D space
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub struct Vec3 {
     pub x: f64,

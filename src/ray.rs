@@ -15,7 +15,7 @@ use crate::vec3::Vec3;
         }
     }
 
-    pub fn at(self, t: i64) -> Vec3 {
+    pub fn at(self, t: f64) -> Vec3 {
        self.orig + (self.dir * t)
     }
 
