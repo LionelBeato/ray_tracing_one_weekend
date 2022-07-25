@@ -2,6 +2,8 @@ use std::ops::Add;
 use std::ops::Div;
 use std::ops::Mul;
 use std::ops::Sub;
+use rand::Rng;
+use rand::thread_rng; 
 
 /// represents either a color or point in 3D space
 #[derive(PartialEq, Clone, Copy, Debug)]
@@ -14,6 +16,22 @@ pub struct Vec3 {
 impl Vec3 {
     pub fn new(x: f64, y: f64, z: f64) -> Self {
         Self { x: x, y: y, z: z }
+    }
+
+    pub fn random() -> Self {
+        Self {x: thread_rng().gen(), y:thread_rng().gen() , z:thread_rng().gen()}
+    }
+
+    pub fn random_range(min:f64, max:f64) -> Self {
+        Self {x: thread_rng().gen_range(min..max), y:thread_rng().gen_range(min..max) , z:thread_rng().gen_range(min..max) } 
+    }
+
+    pub fn random_in_unit_sphere() -> Vec3 {
+        loop {
+            let p = Vec3::random_range(-1.0, 1.0);
+            if p.length_squared() >= 1.0 { continue };
+            return p;
+        }
     }
 
     pub fn length(&self) -> f64 {
