@@ -26,6 +26,10 @@ impl Vec3 {
         Self {x: thread_rng().gen_range(min..max), y:thread_rng().gen_range(min..max) , z:thread_rng().gen_range(min..max) } 
     }
 
+    pub fn random_unit_vector(&self) -> Self {
+        self.unit_vector_self(self.random_unit_vector())
+    }
+
     pub fn random_in_unit_sphere() -> Vec3 {
         loop {
             let p = Vec3::random_range(-1.0, 1.0);
@@ -42,6 +46,10 @@ impl Vec3 {
         self.x * self.x + 
         self.y * self.y + 
         self.z * self.z
+    }
+
+    pub fn unit_vector_self(&self, v: Vec3) -> Vec3 {
+        v / v.length()
     }
 
     pub fn unit_vector(v: Vec3) -> Vec3 {

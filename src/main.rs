@@ -52,13 +52,13 @@ fn ray_color(r:Ray, world:HittableList, depth:f64) -> Vec3 {
         return Vec3::new(0.0, 0.0, 0.0);
     }
 
-    match world.hit(&r, 0.0, f64::INFINITY){
+    match world.hit(&r, 0.001, f64::INFINITY){
         Some(rec) => {
 
             // point3 target = rec.p + rec.normal + random_in_unit_sphere();
             // return 0.5 * ray_color(ray(rec.p, target - rec.p), world);
 
-            let target: Vec3 = rec.p + rec.normal + Vec3::random_in_unit_sphere();
+            let target: Vec3 = rec.p + rec.normal + Vec3::random_unit_vector();
 
             return 0.5 * ray_color(Ray::new(rec.p, target - rec.p), world, depth - 1.0);
         }
@@ -76,7 +76,7 @@ fn main() {
 
     // image
     let aspect_ratio = 16.0 / 9.0;
-    let image_width = 1080; 
+    let image_width = 400; 
     let image_height = (image_width as f64 / aspect_ratio) as i64; 
     let samples_per_pixel = 100;
     let max_depth = 50.0;
