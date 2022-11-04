@@ -26,8 +26,8 @@ impl Vec3 {
         Self {x: thread_rng().gen_range(min..max), y:thread_rng().gen_range(min..max) , z:thread_rng().gen_range(min..max) } 
     }
 
-    pub fn random_unit_vector(&self) -> Self {
-        self.unit_vector_self(self.random_unit_vector())
+    pub fn random_unit_vector() -> Self {
+        Vec3::unit_vector_self(Vec3::random_in_unit_sphere())
     }
 
     pub fn random_in_unit_sphere() -> Vec3 {
@@ -48,7 +48,7 @@ impl Vec3 {
         self.z * self.z
     }
 
-    pub fn unit_vector_self(&self, v: Vec3) -> Vec3 {
+    pub fn unit_vector_self(v: Vec3) -> Vec3 {
         v / v.length()
     }
 
