@@ -5,17 +5,19 @@ use std::ops::Sub;
 use rand::Rng;
 use rand::thread_rng; 
 
+pub type Color = Vector3; 
+pub type Point = Vector3;
 /// represents either a color or point in 3D space
 #[derive(PartialEq, Clone, Copy, Debug)]
-pub struct Vec3 {
+pub struct Vector3 {
     pub x: f64,
     pub y: f64,
     pub z: f64,
 }
 
-impl Vec3 {
-    pub fn new(x: f64, y: f64, z: f64) -> Self {
-        Self { x, y, z }
+impl Vector3 {
+    pub fn new(x: f64, y: f64, z: f64) -> Vector3 {
+        Vector3 { x, y, z }
     }
 
     pub fn random() -> Self {
@@ -27,19 +29,19 @@ impl Vec3 {
     }
 
     pub fn random_unit_vector() -> Self {
-        Vec3::random_in_unit_sphere().normalize()
+        Vector3::random_in_unit_sphere().normalize()
     }
 
-    pub fn random_in_unit_sphere() -> Vec3 {
+    pub fn random_in_unit_sphere() -> Vector3 {
         loop {
-            let p = Vec3::random_range(-1.0, 1.0);
+            let p = Vector3::random_range(-1.0, 1.0);
             if p.length_squared() >= 1.0 { continue };
             return p;
         }
     }
 
-    pub fn length(self) -> f64 {
-        self.length_squared().sqrt()
+    pub fn magnitude(&self) -> f64 {
+        (self.x.powi(2) + self.y.powi(2) +  self.z.powi(2)).sqrt()
     }
 
     pub fn length_squared(&self) -> f64 {
@@ -48,14 +50,14 @@ impl Vec3 {
         self.z.powi(2)
     }
 
-    pub fn normalize(&self) -> Vec3 {
-        self.clone() / self.length()
+    pub fn normalize(&self) -> Vector3 {
+        self.clone() / self.magnitude()
     }
 
-    pub fn dot(u:Vec3, v:Vec3) -> f64 {
-        (u.x * v.x) +
-        (u.y * v.y) + 
-        (u.z * v.z)  
+    pub fn dot(self, v:&Vector3) -> f64 {
+        (self.x * v.x) +
+        (self.y * v.y) + 
+        (self.z * v.z)  
     }
 
     pub fn near_zero(&self) -> bool {
@@ -66,14 +68,14 @@ impl Vec3 {
     // vec3 reflect(const vec3& v, const vec3& n) {
     // return v - 2*dot(v,n)*n;
 
-    pub fn reflect(v:Vec3, n:Vec3) -> Vec3 {
-        v - (n * Vec3::dot(v,n) * 2.0)
+    pub fn reflect(v:Vector3, n:Vector3) -> Vector3 {
+        v - (n * Vector3::dot(v,&n) * 2.0)
     }
 
 }
 
 
-impl Add for Vec3 {
+impl Add for Vector3 {
     type Output = Self;
 
     fn add(self, other: Self) -> Self::Output {
@@ -85,19 +87,19 @@ impl Add for Vec3 {
     }
 }
 
-impl Mul<f64> for Vec3 {
+impl Mul<f64> for Vector3 {
     type Output = Self;
 
     fn mul(self, other: f64) -> Self::Output {
         Self {
             x: self.x * other,
             y: self.y * other,
-            z: self.y * other,
+            z: self.z * other,
         }
     }
 }
  
-impl Div<f64> for Vec3 {
+impl Div<f64> for Vector3 {
     type Output = Self;
 
     fn div(self, other: f64) -> Self::Output {
@@ -110,7 +112,7 @@ impl Div<f64> for Vec3 {
 
 }
 
-impl Sub for Vec3 {
+impl Sub for Vector3 {
     type Output = Self;
 
     fn sub(self, other: Self) -> Self::Output {
@@ -123,31 +125,44 @@ impl Sub for Vec3 {
 
 }
 
+impl Mul<Vector3> for Vector3 {
+    type Output = Self;
+
+    fn mul(self, other: Vector3) -> Self::Output {
+        Self {
+            x: self.x * other.x,
+            y: self.y * other.y,
+            z: self.z * other.z,
+        }
+    }
+
+}
+
 
 #[cfg(test)]
 mod tests {
-    use crate::vec3::Vec3;
+    use crate::vec3::Vector3;
 
     #[test]
     fn length_test() {
-        let vect = Vec3::new(5.0,3.0,1.0);
-        let result = vect.length();
+        let vect = Vector3::new(5.0,3.0,1.0);
+        let result = vect.magnitude();
         assert_eq!(result, 5.916079783099616);
     }
 
     #[test]
     fn division_test() {
-        let vect = Vec3::new(5.0,3.0,1.0);
-        let expected = Vec3 { x: 0.8451542547285166, y: 0.50709255283711, z: 0.1690308509457033 };
+        let vect = Vector3::new(5.0,3.0,1.0);
+        let expected = Vector3 { x: 0.8451542547285166, y: 0.50709255283711, z: 0.1690308509457033 };
         let result = vect.normalize();
         assert_eq!(result, expected);
     }
 
     #[test]
     fn sub_test() {
-        let vect = Vec3::new(5.0,3.0,1.0);
-        let expected = Vec3::new(1.0, 1.0, 1.0); 
-        let result = vect - Vec3::new(4.0,2.0,0.0);
+        let vect = Vector3::new(5.0,3.0,1.0);
+        let expected = Vector3::new(1.0, 1.0, 1.0); 
+        let result = vect - Vector3::new(4.0,2.0,0.0);
         assert_eq!(result, expected);
     }
 

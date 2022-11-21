@@ -1,5 +1,5 @@
-use vector3::Vector3;
-use vec3::Vec3;
+// use vector3::Vector3;
+use vec3::Vector3;
 
 use crate::vec3;
 
