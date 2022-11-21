@@ -1,24 +1,21 @@
-use vector3::Vector3;
-use vec3::Vec3;
-
-use crate::vec3;
+use crate::vec3::Vec3;
 
 #[derive(PartialEq, Clone, Copy, Debug)]
  pub struct Ray {
-     pub orig: Vector3,
-     pub dir: Vector3
+     pub orig: Vec3,
+     pub dir: Vec3
  }
 
  impl Ray {
 
-    pub fn new(origin: Vector3, dir: Vector3) -> Self {
+    pub fn new(origin: Vec3, dir: Vec3) -> Self {
          Self {
             orig: origin,
             dir: dir,
         }
     }
 
-    pub fn at(self, t: f64) -> Vector3 {
+    pub fn at(self, t: f32) -> Vec3 {
        self.orig + (self.dir * t)
     }
 

@@ -73,7 +73,14 @@ version = "0.1.0"
 dependencies = [
  "clamp",
  "rand",
+ "vector3",
 ]
+
+[[package]]
+name = "vector3"
+version = "1.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "082cc5c946170e905214fe5cac2b9bbb81d790ae632ee7b8c7d736d59cd0827e"
 
 [[package]]
 name = "wasi"
