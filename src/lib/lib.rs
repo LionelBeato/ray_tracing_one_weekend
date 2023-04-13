@@ -36,7 +36,7 @@ pub fn ray_color(r:&Ray, world:HittableList, depth:i64) -> Color {
 
     if depth <= 0 { return Color::new(0.0, 0.0, 0.0); }
 
-    if world.hit(r, 0.0, f64::INFINITY, &mut rec) {
+    if world.hit(r, 0.0001, f64::INFINITY, &mut rec) {
         let target:Point = rec.p + rec.normal + Vector3::random_in_unit_sphere();
         return ray_color(&Ray::new(rec.p, target - rec.p), world, depth - 1) * 0.5;
     }
@@ -53,9 +53,12 @@ pub fn write_color(pixel_color:Color, samples_per_pixel:i64) {
         let mut b = pixel_color.z;
 
         let scale = 1.0 / samples_per_pixel as f64;
-        r *= scale; 
-        g *= scale; 
-        b *= scale; 
+        r = f64::sqrt(scale * r);
+        g = f64::sqrt(scale * g);
+        b = f64::sqrt(scale * b);
+        // r *= scale; 
+        // g *= scale; 
+        // b *= scale; 
         
         println!("{} {} {}",
         (256.0 * clamp(r, 0.0, 10.999)),
