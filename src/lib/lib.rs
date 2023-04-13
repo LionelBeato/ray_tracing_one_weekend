@@ -37,7 +37,7 @@ pub fn ray_color(r:&Ray, world:HittableList, depth:i64) -> Color {
     if depth <= 0 { return Color::new(0.0, 0.0, 0.0); }
 
     if world.hit(r, 0.0001, f64::INFINITY, &mut rec) {
-        let target:Point = rec.p + rec.normal + Vector3::random_in_unit_sphere();
+        let target:Point = rec.p + rec.normal + Vector3::random_unit_vector();
         return ray_color(&Ray::new(rec.p, target - rec.p), world, depth - 1) * 0.5;
     }
 
