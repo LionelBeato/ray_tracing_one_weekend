@@ -17,7 +17,7 @@ impl Camera {
         let viewport_height:f64 = 2.0 * h;
         let viewport_width:f64 = aspect_ratio * viewport_height;
 
-        // let focal_length = 1.0;
+        let focal_length = 1.0;
 
         let w = (look_from - look_at).normalize();
         let u = Vector3::cross(vertical_up, w).normalize();

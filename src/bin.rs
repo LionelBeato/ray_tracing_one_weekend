@@ -1,13 +1,21 @@
+use lib::vec3::Point;
 use::lib::vec3::Vector3;
 use::lib::ray::Ray;
 use::lib::ray_color;
+use::lib::hit::HittableList;
 use::lib::write_color;
+use::lib::sphere::Sphere;
 
 fn main() {
 
     let aspect_ratio = 16.0 / 9.0;
     let image_width = 400;
     let image_height = image_width as f32 / aspect_ratio;
+
+    // world
+    let mut world = HittableList::new();
+    world.add(Sphere::new(Point::new(0.0, 0.0, -1.0), 0.5).into());
+    world.add(Sphere::new(Point::new(0.0, -100.5, -1.0), 100.0).into());
 
     let viewport_height = 2.0;
     let viewport_width = aspect_ratio * viewport_height;
@@ -31,7 +39,7 @@ fn main() {
             let dir = lower_left_corner + (horizontal * u as f64) + (vertical * v as f64) - origin;
             let r = Ray::new(origin, dir);
 
-            let pixel_color = ray_color(&r);
+            let pixel_color = ray_color(&r, world.clone());
             write_color(pixel_color);
         }
     }

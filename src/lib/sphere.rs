@@ -10,7 +10,7 @@ use crate::material::Material;
 pub struct Sphere {
     pub center:Vector3,
     pub radius:f64,
-    pub material_pointer: Rc<dyn Material>,
+    // pub material_pointer: Rc<dyn Material>,
 }
 
 impl Hittable for Sphere {
@@ -38,8 +38,17 @@ impl Hittable for Sphere {
         rec.p = r.at(root);
         let outward_normal: Vector3 = (rec.p - self.center) / self.radius;
         rec.set_face_normal(r, outward_normal);
-        rec.material_pointer = self.material_pointer.clone();
+        // rec.material_pointer = self.material_pointer.clone();
 
         true
+    }
+}
+
+impl Sphere {
+    pub fn new(center:Vector3, radius:f64) -> Self {
+        Self {
+           center: center,
+           radius: radius,
+       }
     }
 }
