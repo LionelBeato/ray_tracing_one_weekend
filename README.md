@@ -1,5 +1,7 @@
 # Rust Raytracing In One Weekend
 
+![](image.png)
+
 An attempt at creating a raytracer in Rust. Outputs an image in `.ppm` format. Run with the command `cargo run > image.ppm`.
 
 ## References

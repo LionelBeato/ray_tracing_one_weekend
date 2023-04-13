@@ -12,7 +12,7 @@ fn test_vec3() {
 #[test]
 fn write_color_test() {
     let vec = Vector3::new(12.0, 12.0, 12.0);
-    write_color(vec);
+    write_color(vec, 100);
 }
 
 #[test]

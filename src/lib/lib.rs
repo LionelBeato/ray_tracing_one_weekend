@@ -1,5 +1,5 @@
 use std::{f32::INFINITY, rc::Rc};
-
+use clamp::clamp;
 use hit::{Hittable, HittableList, HitRecord};
 use ray::Ray;
 use vec3::{Vector3, Color, Point};
@@ -9,7 +9,7 @@ pub mod vec3;
 pub mod hit;
 pub mod material;
 pub mod sphere;
-// pub mod camera;
+pub mod camera;
 
 pub fn hit_sphere(center:&Point, radius:f64, r:&Ray) -> f64 {
     let oc = r.orig - *center;
@@ -43,10 +43,20 @@ pub fn ray_color(r:&Ray, world:HittableList) -> Color {
     Color::new(1.0, 1.0, 1.0) * (1.0 - t) + (Vector3::new(0.5, 0.7, 1.0) * t)
 }
 
-pub fn write_color(pixel_color:Color) {
+pub fn write_color(pixel_color:Color, samples_per_pixel:i64) {
+
+        let mut r = pixel_color.x;
+        let mut g = pixel_color.y;
+        let mut b = pixel_color.z;
+
+        let scale = 1.0 / samples_per_pixel as f64;
+        r *= scale; 
+        g *= scale; 
+        b *= scale; 
+        
         println!("{} {} {}",
-        255.99 * pixel_color.x,
-        255.99 * pixel_color.y,
-        255.99 * pixel_color.z
+        (256.0 * clamp(r, 0.0, 10.999)),
+        (256.0 * clamp(g, 0.0, 10.999)),
+        (256.0 * clamp(b, 0.0, 10.999))
     ); 
 }
