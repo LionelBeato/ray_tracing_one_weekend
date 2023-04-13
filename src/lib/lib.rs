@@ -24,7 +24,7 @@ pub fn hit_sphere(center:&Point, radius:f64, r:&Ray) -> f64 {
     }
 }
 
-pub fn ray_color(r:&Ray, world:HittableList) -> Color {
+pub fn ray_color(r:&Ray, world:HittableList, depth:i64) -> Color {
 
     let mut rec:HitRecord = HitRecord { 
         p: Vector3::new(0.0, 0.0, 0.0), 
@@ -34,8 +34,11 @@ pub fn ray_color(r:&Ray, world:HittableList) -> Color {
         front_face: false 
     };
 
+    if depth <= 0 { return Color::new(0.0, 0.0, 0.0); }
+
     if world.hit(r, 0.0, f64::INFINITY, &mut rec) {
-        return (rec.normal + Color::new(1.0, 1.0, 1.0)) * 0.5;
+        let target:Point = rec.p + rec.normal + Vector3::random_in_unit_sphere();
+        return ray_color(&Ray::new(rec.p, target - rec.p), world, depth - 1) * 0.5;
     }
 
     let unit_direction = r.dir.normalize();

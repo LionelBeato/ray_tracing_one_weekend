@@ -15,6 +15,7 @@ fn main() {
     let image_width = 400;
     let image_height = image_width as f32 / aspect_ratio;
     let samples_per_pixel = 100;
+    let max_depth = 50;
 
     // world
     let mut world = HittableList::new();
@@ -48,7 +49,7 @@ fn main() {
                 // let dir = lower_left_corner + (horizontal * u as f64) + (vertical * v as f64) - origin;
                 // let r = Ray::new(origin, dir);
                 let r = cam.get_ray(u, v);
-                pixel_color = pixel_color + ray_color(&r, world.to_owned());
+                pixel_color = pixel_color + ray_color(&r, world.to_owned(), max_depth);
             }
             write_color(pixel_color, samples_per_pixel);
         }
