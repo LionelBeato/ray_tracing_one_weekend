@@ -9,11 +9,11 @@ pub struct Metal {
 }
 
 impl Material for Metal {
-    fn scatter(&self, ray: &Ray, hit_record: &HitRecord, attenuation:&mut Vector3, scattered: &mut Ray) -> bool {
+    fn scatter(&self, ray: &Ray, hit_record: &HitRecord, attenuation:&mut Vector3, mut scattered: &mut Ray) -> bool {
 
         let reflected = Vector3::reflect(ray.dir.normalize(), hit_record.normal);
-        // scattered = &mut Ray::new(hit_record.p, reflected);
-        // *attenuation = self.albedo;
+        *scattered = Ray::new(hit_record.p, reflected);
+        *attenuation = self.albedo;
         Vector3::dot(scattered.dir, &reflected) > 0.0
 
     }

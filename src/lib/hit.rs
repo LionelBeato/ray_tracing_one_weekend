@@ -12,7 +12,7 @@ use std::vec::Vec;
 pub struct HitRecord {
     pub p: Vector3,
     pub normal: Vector3,
-    // pub material_pointer: Rc<dyn Material>,
+    pub material_pointer: Rc<dyn Material>,
     pub t: f64,
     pub front_face:bool,
 }   
@@ -41,7 +41,7 @@ impl Hittable for HittableList {
         let mut temp_rec = &mut HitRecord {
             p:Vector3::random(), 
             normal: Vector3::random(),
-            // material_pointer: Rc::new(Lambertian { albedo: Vector3::random() }), 
+            material_pointer: Rc::new(Lambertian { albedo: Vector3::random() }), 
             t: 0.0, 
             front_face: false
         };

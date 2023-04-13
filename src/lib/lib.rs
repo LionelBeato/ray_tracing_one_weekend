@@ -1,6 +1,7 @@
-use std::{f32::INFINITY, rc::Rc};
+use std::{f32::INFINITY, rc::Rc, default, ptr::NonNull};
 use clamp::clamp;
 use hit::{Hittable, HittableList, HitRecord};
+use material::{Material, Lambertian};
 use ray::Ray;
 use vec3::{Vector3, Color, Point};
 
@@ -29,7 +30,7 @@ pub fn ray_color(r:&Ray, world:HittableList, depth:i64) -> Color {
     let mut rec:HitRecord = HitRecord { 
         p: Vector3::new(0.0, 0.0, 0.0), 
         normal: Vector3::new(0.0, 0.0, 0.0), 
-        // material_pointer: Rc<>::default(),
+        material_pointer: Rc::new(Lambertian { albedo: Vector3::random() }), 
         t: 0.0,
         front_face: false 
     };
@@ -37,8 +38,14 @@ pub fn ray_color(r:&Ray, world:HittableList, depth:i64) -> Color {
     if depth <= 0 { return Color::new(0.0, 0.0, 0.0); }
 
     if world.hit(r, 0.0001, f64::INFINITY, &mut rec) {
-        let target:Point = rec.p + rec.normal + Vector3::random_unit_vector();
-        return ray_color(&Ray::new(rec.p, target - rec.p), world, depth - 1) * 0.5;
+        let mut scattered = Ray::new(Vector3::new(0.0, 0.0, 0.0),Vector3::new(0.0, 0.0, 0.0));
+        let mut attenuation = Color::new(0.0,0.0,0.0);
+        if rec.material_pointer.scatter(r, &rec, &mut attenuation, &mut scattered) {
+            return attenuation + ray_color(&scattered, world, depth-1)
+        }
+        return Color::new(0.0, 0.0, 0.0);
+        // let target:Point = rec.p + rec.normal + Vector3::random_unit_vector();
+        // return ray_color(&Ray::new(rec.p, target - rec.p), world, depth - 1) * 0.5;
     }
 
     let unit_direction = r.dir.normalize();
